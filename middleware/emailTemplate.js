@@ -1,4 +1,4 @@
-exports.signUpTemplate = () => {
+exports.signUpTemplate = (otp) => {
     return `
     <!DOCTYPE html>
 <html lang="en">
@@ -319,7 +319,7 @@ exports.signUpTemplate = () => {
     <div class="Text2">
         <h2>Here is Your One Time Password
             <br />
-            <p>to Verify that you are a New User </p>
+            <p>to Verify. </p>
         </h2>
     </div>
     <div class="Text3">

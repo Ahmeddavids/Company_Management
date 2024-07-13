@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const { sendEmail } = require('../middleware/sendMail');
 const OTP = require('../models/otpModel');
 const otpGenerator = require('otp-generator');
+const { signUpTemplate } = require('../middleware/emailTemplate');
 const currentDate = new Date();
 const formattedDate = currentDate.toLocaleDateString('en-GB', {
     day: '2-digit',
@@ -73,7 +74,7 @@ exports.userSignUp = async (req, res) => {
         const mailOptions = {
             email: user.email,
             subject: "Verify your account",
-            html: `Please enter this OTP ${otp} on the verification page.  It expires in 10mins`,
+            html: signUpTemplate(otp),
         };
 
         await sendEmail(mailOptions);
@@ -216,7 +217,7 @@ exports.resendVerificationEmail = async (req, res) => {
         const mailOptions = {
             email: user.email,
             subject: "Verify your account",
-            html: `Please enter this OTP ${otp} on the verification page.`,
+            html: signUpTemplate(otp),
         };
 
         await user.save();
@@ -280,7 +281,7 @@ exports.forgotPassword = async (req, res) => {
         const mailOptions = {
             email: user.email,
             subject: "Password reset OTP",
-            html: `Please enter this OTP ${otp}.`,
+            html: signUpTemplate(otp),
         };;
 
         await user.save();
