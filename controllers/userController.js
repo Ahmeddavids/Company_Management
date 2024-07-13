@@ -36,6 +36,8 @@ exports.userSignUp = async (req, res) => {
         // hash the salted password using bcrypt
         const hashedPassword = bcrypt.hashSync(password, salt);
 
+     
+
         // create a user
         const user = new userModel({
             email,
@@ -58,13 +60,20 @@ exports.userSignUp = async (req, res) => {
             user: user._id,
         });
 
+        const token = jwt.sign({
+            userId: user._id,
+            email: user.email,
+        },
+            process.env.JWT_SECRET, { expiresIn: "50 mins" })
+
         user.lastOtpId = otpInstance._id;
+        user.token = token;
 
         // send verification email
         const mailOptions = {
             email: user.email,
             subject: "Verify your account",
-            html: `Please enter this OTP ${otp} on the verification page.`,
+            html: `Please enter this OTP ${otp} on the verification page.  It expires in 10mins`,
         };
 
         await sendEmail(mailOptions);
