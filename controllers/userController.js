@@ -258,7 +258,7 @@ exports.forgotPassword = async (req, res) => {
         }
 
         // Generate OTP
-        const otp = otpGenerator.generate(5, {
+        const otp = otpGenerator.generate(4, {
             lowerCaseAlphabets: false,
             upperCaseAlphabets: false,
             specialChars: false,
