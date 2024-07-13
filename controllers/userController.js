@@ -299,6 +299,67 @@ exports.forgotPassword = async (req, res) => {
     }
 };
 
+// verify email
+exports.verifyEmailOTP = async (req, res) => {
+    try {
+        const { otp } = req.body;
+        const { token } = req.params;
+
+        if (!otp) {
+            return res.status(400).json({
+                message: "Please enter OTP"
+            });
+        }
+        if (!token) {
+            return res.status(404).json({
+                message: "Token not found"
+            });
+        }
+
+        // Verify the token and extract the user's email
+        const { email } = jwt.verify(token, process.env.JWT_SECRET);
+
+        // Retrieve user from the database based on the email
+        const user = await userModel.findOne({ email: email.toLowerCase() });
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
+
+        // Retrieve the stored OTP document based on the user otp input
+        const storedOtp = await OTP.findOne({ otp: otp });
+
+        if (!storedOtp) {
+            return res.status(404).json({
+                message: 'Invalid OTP'
+            });
+        }
+
+        // Compare the user-entered OTP with the stored OTP
+        if (storedOtp._id.toString() === user.lastOtpId.toString()) {
+            return res.status(200).json({
+                message: "Verification successful. Please proceed to input your new password."
+            });
+        } else {
+            return res.status(400).json({
+                message: "Invalid OTP"
+            });
+        }
+        // res.status( 200 ).redirect( `${req.protocol}://${req.get("host")}/api/log-in` );
+
+    } catch (error) {
+        if (error instanceof jwt.JsonWebTokenError) {
+            return res.status(404).json({
+                message: "Session timed-out."
+            });
+        }
+        res.status(500).json({
+            message: error.message
+        })
+    }
+}
 
 // Reset Password
 exports.resetPassword = async (req, res) => {

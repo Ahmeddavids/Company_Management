@@ -27,6 +27,10 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    isAdmin: {
+        type: Boolean,
+        default: true
+    },
     lastOtpId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'OTP'
