@@ -37,7 +37,7 @@ exports.userSignUp = async (req, res) => {
         // hash the salted password using bcrypt
         const hashedPassword = bcrypt.hashSync(password, salt);
 
-     
+
 
         // create a user
         const user = new userModel({
@@ -368,13 +368,10 @@ exports.resetPassword = async (req, res) => {
         const { password } = req.body;
 
         // Verify the user's token
-        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-
-        // Get the user's Id from the token
-        const userId = decodedToken.userId;
+        const { email } = jwt.verify(token, process.env.JWT_SECRET);
 
         // Find the user by ID
-        const user = await userModel.findById(userId);
+        const user = await userModel.findOne({ email });
         if (!user) {
             return res.status(404).json({
                 message: "User not found"
