@@ -10,7 +10,7 @@ router.route('/users/log-in').post(userLogin)
 // router.route('/log-out/:userId').post(authenticate, signOut)
 
 router.route("/users/verify-email/:token")
-    .get(verifyEmail);
+    .post(verifyEmail);
 
 router.route("/users/resend-verification-email")
     .post(resendVerificationEmail);
