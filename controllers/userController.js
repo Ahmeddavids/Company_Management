@@ -6,12 +6,6 @@ const { sendEmail } = require('../middleware/sendMail');
 const OTP = require('../models/otpModel');
 const otpGenerator = require('otp-generator');
 const { signUpTemplate } = require('../middleware/emailTemplate');
-const currentDate = new Date();
-const formattedDate = currentDate.toLocaleDateString('en-GB', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric'
-});
 
 
 // user sign up
@@ -77,10 +71,10 @@ exports.userSignUp = async (req, res) => {
             html: signUpTemplate(otp),
         };
 
-        await sendEmail(mailOptions);
-
+        
         // save the user
         await user.save();
+        await sendEmail(mailOptions);
 
         // return a response
         res.status(201).json({
@@ -539,7 +533,7 @@ exports.signOut = async (req, res) => {
         });
     } catch (error) {
         res.status(500).json({
-            Error: error.message,
+            message: error.message,
         });
     }
 };
