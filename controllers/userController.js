@@ -6,6 +6,7 @@ const { sendEmail } = require('../middleware/sendMail');
 const OTP = require('../models/otpModel');
 const otpGenerator = require('otp-generator');
 const { signUpTemplate } = require('../middleware/emailTemplate');
+const workerModel = require('../models/workerModel');
 
 
 // user sign up
@@ -518,21 +519,26 @@ exports.changePassword = async (req, res) => {
 // User sign out
 exports.signOut = async (req, res) => {
     try {
-        const { userId } = req.user;
+        const { userId } = req.params;
 
         // Update the user's token to null
-        const user = await userModel.findByIdAndUpdate(userId, { token: null }, { new: true });
+        let user = await userModel.findByIdAndUpdate(userId, { token: null }, { new: true });
+
+        if (!user) {
+            user = await workerModel.findByIdAndUpdate(userId, { token: null }, { new: true });
+        }
 
         if (!user) {
             return res.status(404).json({
                 message: 'User not found',
             });
         }
-        res.status(200).json({
+
+        return res.status(200).json({
             message: 'User logged out successfully',
         });
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message,
         });
     }
