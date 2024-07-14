@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const userModel = require('../models/userModel');
+const workerModel = require('../models/workerModel');
 
 
 // To authenticate a user token in the database
@@ -135,6 +136,50 @@ const superAuth = (req, res, next) => {
     })
 }
 
+const authenticateLogout = async (req, res, next) => {
+    try {
+        let user = await userModel.findById(req.params.userId);
+
+        if (!user) {
+            user = await workerModel.findById(req.params.userId);
+        }
+
+        if (!user) {
+            return res.status(404).json({
+                message: 'User not found.'
+            });
+        }
+
+        const userToken = user.token;
+
+        if (!userToken) {
+            return res.status(400).json({
+                message: 'User not logged in. Please log in and try again.'
+            });
+        }
+
+        await jwt.verify(userToken, process.env.JWT_SECRET, (err, payLoad) => {
+            if (err) {
+                return res.status(401).json({
+                    message: 'Invalid or expired token. Please log in again.'
+                });
+            } else {
+                req.user = payLoad;
+                next();
+            }
+        });
+
+    } catch (error) {
+        if (error instanceof jwt.JsonWebTokenError) {
+            return res.status(401).json({
+                message: "Your session has timed out. Please log in again."
+            });
+        }
+        return res.status(500).json({
+            message: error.message
+        })
+    }
+};
 
 
 
@@ -142,5 +187,6 @@ module.exports = {
     checkUser,
     superAuth,
     authenticate,
-    authentication
+    authentication,
+    authenticateLogout
 }
