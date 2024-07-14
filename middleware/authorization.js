@@ -20,6 +20,11 @@ const authentication = async (req, res, next) => {
                 message: 'Token not found'
             })
         }
+        if(!user.isAdmin) {
+            return res.status(403).json({
+                message: 'You are not authorized to perform this action'
+            })
+        }
 
         await jwt.verify(userToken, process.env.JWT_SECRET, (err, payLoad) => {
 
@@ -32,8 +37,13 @@ const authentication = async (req, res, next) => {
         })
 
     } catch (error) {
+        if (error instanceof jwt.JsonWebTokenError) {
+            return res.status(404).json({
+                message: "Session timed-out."
+            });
+        }
         res.status(500).json({
-            Error: error.message
+            message: error.message
         })
     }
 }
@@ -69,6 +79,11 @@ const authenticate = async (req, res, next) => {
         })
 
     } catch (error) {
+        if (error instanceof jwt.JsonWebTokenError) {
+            return res.status(404).json({
+                message: "Session timed-out."
+            });
+        }
         res.status(500).json({
             message: error.message
         })
@@ -126,5 +141,6 @@ const superAuth = (req, res, next) => {
 module.exports = {
     checkUser,
     superAuth,
-    authenticate
+    authenticate,
+    authentication
 }
