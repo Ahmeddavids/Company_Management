@@ -10,7 +10,7 @@ router.post('/sign-in', employeeLogin);
 
 router.get('/get-one/:employeeId', getEmployeeById);
 
-router.get('/get-all-employees/:userId', authenticate, getEmployeeById);
+router.get('/get-all-employees/:userId', authenticate, getAllEmployeesByHR);
 
 router.get('/get-total', getAllEmployeesAndTotalSalaries);
 
