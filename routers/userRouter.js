@@ -1,5 +1,6 @@
 const express = require('express');
 const { userSignUp, userLogin, signOut, verifyEmail, resendVerificationEmail, changePassword, resetPassword, forgotPassword, verifyEmailOTP } = require('../controllers/userController');
+const { authenticateLogout } = require('../middleware/authorization');
 
 const router = express.Router();
 
@@ -7,7 +8,7 @@ router.route('/users/sign-up').post(userSignUp)
 
 router.route('/users/log-in').post(userLogin)
 
-// router.route('/log-out/:userId').post(authenticate, signOut)
+router.route('/log-out/:userId').post( authenticateLogout, signOut)
 
 router.route("/users/verify-email/:token")
     .post(verifyEmail);
