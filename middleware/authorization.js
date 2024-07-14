@@ -72,7 +72,9 @@ const authenticate = async (req, res, next) => {
         await jwt.verify(userToken, process.env.JWT_SECRET, (err, payLoad) => {
 
             if (err) {
-                return res.json(err.message)
+                return res.status(401).json({
+                   message: "Your session has timed out. Please log in again."
+                });
             } else {
                 req.user = payLoad
                 next()
