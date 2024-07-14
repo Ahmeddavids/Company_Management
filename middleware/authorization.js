@@ -163,7 +163,7 @@ const authenticateLogout = async (req, res, next) => {
         await jwt.verify(userToken, process.env.JWT_SECRET, (err, payLoad) => {
             if (err) {
                 return res.status(401).json({
-                    message: 'Invalid or expired token. Please log in again.'
+                    message: "Your session has timed out. Please log in again."
                 });
             } else {
                 req.user = payLoad;
