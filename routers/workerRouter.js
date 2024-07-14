@@ -1,5 +1,5 @@
 const express = require('express');
-const { employeeSignUp, employeeLogin, getEmployeeById, getAllEmployeesAndTotalSalaries } = require('../controllers/workerController');
+const { employeeSignUp, employeeLogin, getEmployeeById, getAllEmployeesAndTotalSalaries, getAllEmployeesByHR } = require('../controllers/workerController');
 const { authenticate } = require('../middleware/authorization');
 
 const router = express.Router();
