@@ -216,3 +216,37 @@ exports.getAllEmployeesAndTotalSalaries = async (req, res) => {
         });
     }
 };
+
+exports.deleteWorker = async (req, res) => {
+    try {
+        const { employeeId, userId } = req.params;
+
+        // Find the worker by ID
+        const worker = await workerModel.findById(employeeId);
+
+        if (!worker) {
+            return res.status(404).json({
+                message: 'Employee not found. Please check the employee ID and try again.'
+            });
+        }
+
+        // Check if the worker was added by the HR user
+        if (worker.employer.toString() !== userId) {
+            return res.status(403).json({
+                message: 'You are not authorized to delete this employee.'
+            });
+        }
+
+        // Delete the worker
+        await workerModel.findByIdAndDelete(employeeId);
+
+        return res.status(200).json({
+            message: 'Employee deleted successfully.'
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
