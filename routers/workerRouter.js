@@ -12,7 +12,7 @@ router.get('/get-one/:employeeId', getEmployeeById);
 
 router.get('/get-all-employees/:userId', authenticate, getAllEmployeesByHR);
 
-router.get('/get-total', getAllEmployeesAndTotalSalaries);
+router.get('/get-total/:userId', authenticate, getAllEmployeesAndTotalSalaries);
 
 router.delete('/terminate/:userId/:employeeId', authenticate, deleteWorker);
 
