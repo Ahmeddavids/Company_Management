@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const { sendEmail } = require('../middleware/sendMail');
 const OTP = require('../models/otpModel');
 const otpGenerator = require('otp-generator');
-const { signUpTemplate } = require('../middleware/emailTemplate');
+const { signUpTemplate, forgotPasswordTemplate } = require('../middleware/emailTemplate');
 const workerModel = require('../models/workerModel');
 
 
@@ -276,7 +276,7 @@ exports.forgotPassword = async (req, res) => {
         const mailOptions = {
             email: user.email,
             subject: "Password reset OTP",
-            html: signUpTemplate(otp),
+            html: forgotPasswordTemplate(otp, user.fullName),
         };;
 
         await user.save();
