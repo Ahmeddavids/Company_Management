@@ -1,4 +1,4 @@
-exports.signUpTemplate = (otp) => {
+exports.signUpTemplate = (otp, fullName) => {
     return `
     <!DOCTYPE html>
 <html lang="en">
@@ -23,7 +23,7 @@ exports.signUpTemplate = (otp) => {
                     <!-- Body -->
                     <tr>
                         <td class="body" style="padding: 30px; text-align: left; font-size: 25px; line-height: 1.6;">
-                        Hello, Admin  <br>
+                        Hello, ${fullName}  <br>
                        
                         <br><br>
                           This is Your one-Time-Password to Verify that You are 
@@ -38,7 +38,7 @@ exports.signUpTemplate = (otp) => {
                             <table cellspacing="0" cellpadding="0" style="margin: auto;">
                                 <tr>
                                     <td align="center" style="background-color: #0b0830; padding: 10px 20px; border-radius: 5px;">
-                                        <a href="#" target="_blank" style="color: #ffffff; text-decoration: none; font-weight: bold; font-size: 30px; gap: 10px;">1234</a>
+                                        <a href="#" target="_blank" style="color: #ffffff; text-decoration: none; font-weight: bold; font-size: 30px; gap: 10px;">${otp}</a>
                                     </td>
                                 </tr>
                             </table>
