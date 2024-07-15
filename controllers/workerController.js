@@ -194,11 +194,12 @@ exports.getAllEmployeesByHR = async (req, res) => {
 
 exports.getAllEmployeesAndTotalSalaries = async (req, res) => {
     try {
-        const employees = await workerModel.find();
+        const HRId = req.user.userId;
+        const employees = await workerModel.find({ employer: HRId });
 
         if (employees.length === 0) {
             return res.status(404).json({
-                message: `No employees found`
+                message: `No employees found for HR with ID ${HRId}`
             });
         }
 
