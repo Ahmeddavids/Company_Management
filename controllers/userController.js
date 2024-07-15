@@ -69,7 +69,7 @@ exports.userSignUp = async (req, res) => {
         const mailOptions = {
             email: user.email,
             subject: "Verify your account",
-            html: signUpTemplate(otp),
+            html: signUpTemplate(otp, user.fullName),
         };
 
         
