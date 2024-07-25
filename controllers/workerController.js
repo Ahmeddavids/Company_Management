@@ -29,6 +29,13 @@ exports.employeeSignUp = async (req, res) => {
                 message: `Employee already exist.`
             })
         }
+        const HREmail = await HRModel.findOne({ email: email.toLowerCase() })
+
+        if (HREmail) {
+            return res.status(400).json({
+                message: `Cannot sign up an employee using an HR email.`
+            })
+        }
 
         const HR = await HRModel.findById(userId)
 
